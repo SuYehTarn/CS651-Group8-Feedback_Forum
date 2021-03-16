@@ -4,7 +4,7 @@
 import unittest
 from sqlalchemy.exc import IntegrityError
 from app import create_app, db
-from app.models import Feedback
+from app.models.feedback import Feedback
 
 
 class FeedbackModelTestCase(unittest.TestCase):

@@ -4,7 +4,7 @@
 import unittest
 from sqlalchemy.exc import IntegrityError
 from app import create_app, db
-from app.models import Administrator
+from app.models.administrator import Administrator
 
 
 class AdministratorModelTestCase(unittest.TestCase):

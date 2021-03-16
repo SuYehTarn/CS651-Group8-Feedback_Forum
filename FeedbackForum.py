@@ -1,7 +1,12 @@
+"""The entry module of the web app
+"""
+
 import os
 import click
 from app import create_app, db
-from app.models import Feedback, ReviewStatus, Administrator
+from app.models.feedback import Feedback
+from app.models.administrator import Administrator
+from app.models.review_status import ReviewStatus
 
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -9,6 +14,7 @@ app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
 @app.shell_context_processor
 def make_shell_context():
+    """Set the environment for Flask shell"""
     return dict(db=db, Feedback=Feedback,
                 ReviewStatus=ReviewStatus,
                 Administrator=Administrator)

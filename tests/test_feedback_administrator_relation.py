@@ -3,7 +3,9 @@
 
 import unittest
 from app import create_app, db
-from app.models import Administrator, Feedback, ReviewStatus
+from app.models.administrator import Administrator
+from app.models.feedback import Feedback
+from app.models.review_status import ReviewStatus
 
 
 class ModelRelationTestCase(unittest.TestCase):
