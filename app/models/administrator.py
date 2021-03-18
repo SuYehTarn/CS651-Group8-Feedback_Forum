@@ -3,10 +3,17 @@
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import synonym
-from app import db
+from flask_login import UserMixin
+from app import db, login_manager
 
 
-class Administrator(db.Model):
+@login_manager.user_loader
+def load_admin(admin_id):
+    """Load the specified administrator from the database"""
+    return Administrator.query.get(int(admin_id))
+
+
+class Administrator(UserMixin, db.Model):
     """The Administrator model"""
     __tablename__ = 'administrators'
     id = db.Column(db.Integer, primary_key=True)

@@ -2,6 +2,7 @@
 """
 
 import unittest
+from sqlalchemy.orm.exc import FlushError
 from sqlalchemy.exc import IntegrityError
 from app import create_app, db
 from app.models.review_status import ReviewStatus
@@ -16,6 +17,17 @@ class ReviewStatusModelTestCase(unittest.TestCase):
         self.app_context.push()
         db.create_all()
 
+        # create a ReviewStatus for testing
+        self.test_info = {
+            'name': 'test',
+        }
+        db.session.add(ReviewStatus(**self.test_info))
+        db.session.commit()
+        self.test_review_status_in_db = db.session \
+            .query(ReviewStatus) \
+            .filter_by(name=self.test_info['name']) \
+            .first()
+
     def tearDown(self) -> None:
         db.session.remove()
         db.drop_all()
@@ -23,52 +35,37 @@ class ReviewStatusModelTestCase(unittest.TestCase):
 
     def test_id_auto_set(self) -> None:
         """Test of id auto-setting"""
-        name = 'test'
-        db.session.add(ReviewStatus(name=name))
-        db.session.commit()
-        target = db.session.query(ReviewStatus) \
-            .filter_by(name=name).first()
-        self.assertIsNotNone(target.id)
+        self.assertIsNotNone(
+            self.test_review_status_in_db.id)
 
     def test_id_auto_increment(self) -> None:
         """Test of id auto-incrementing"""
-        old_id = None
+        old_id = self.test_review_status_in_db.id
         for i in range(5):
             name = f'test{i}'
             db.session.add(ReviewStatus(name=name))
             db.session.commit()
             new_id = db.session.query(ReviewStatus) \
                 .filter_by(name=name).first().id
-            if i > 0:
-                self.assertEqual(old_id + 1, new_id)
+            self.assertEqual(old_id + 1, new_id)
             old_id = new_id
 
     def test_id_is_unique(self) -> None:
         """Test of id uniqueness"""
-        name = 'test'
-        db.session.add(ReviewStatus(name=name))
-        db.session.commit()
-        target_id = db.session.query(ReviewStatus) \
-            .filter_by(name=name).first().id
-        db.session.add(ReviewStatus(id=target_id))
-        with self.assertRaises(IntegrityError):
+        db.session.add(ReviewStatus(
+            id=self.test_review_status_in_db.id))
+        with self.assertRaises(FlushError):
             db.session.commit()
 
     def test_name_can_set(self) -> None:
         """Test of setting name"""
-        name = 'test'
-        review_status = ReviewStatus(name=name)
-        db.session.add(review_status)
-        db.session.commit()
-        review_status_in_db = db.session.query(ReviewStatus) \
-            .filter_by(name=name).first()
-        self.assertEqual(review_status.name, review_status_in_db.name)
+        self.assertEqual(self.test_info['name'],
+                         self.test_review_status_in_db.name)
 
     def test_name_unique(self) -> None:
         """Test of name uniqueness"""
-        name = 'test'
-        db.session.add_all([ReviewStatus(name=name),
-                            ReviewStatus(name=name)])
+        db.session.add(
+            ReviewStatus(name=self.test_info['name']))
         with self.assertRaises(IntegrityError):
             db.session.commit()
 

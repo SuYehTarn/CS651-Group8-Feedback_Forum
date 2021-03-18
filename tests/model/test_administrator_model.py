@@ -3,6 +3,7 @@
 
 import unittest
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import FlushError
 from app import create_app, db
 from app.models.administrator import Administrator
 
@@ -16,6 +17,16 @@ class AdministratorModelTestCase(unittest.TestCase):
         self.app_context.push()
         db.create_all()
 
+        # create an Administrator for testing
+        self.test_info = {
+            'name': 'test',
+            'password': 'test password',
+        }
+        db.session.add(Administrator(**self.test_info))
+        db.session.commit()
+        self.admin_in_db = db.session.query(Administrator) \
+            .filter_by(name=self.test_info['name']).first()
+
     def tearDown(self) -> None:
         db.session.remove()
         db.drop_all()
@@ -23,51 +34,34 @@ class AdministratorModelTestCase(unittest.TestCase):
 
     def test_id_auto_set(self) -> None:
         """Test of id auto-setting"""
-        name = 'test'
-        db.session.add(Administrator(name=name))
-        db.session.commit()
-        target = db.session.query(Administrator) \
-            .filter_by(name=name).first()
-        self.assertIsNotNone(target.id)
+        self.assertIsNotNone(self.admin_in_db.id)
 
     def test_id_auto_increment(self) -> None:
         """Test of id auto-incrementing"""
-        old_id = None
+        old_id = self.admin_in_db.id
         for i in range(5):
             name = f'test{i}'
             db.session.add(Administrator(name=name))
             db.session.commit()
             new_id = db.session.query(Administrator) \
                 .filter_by(name=name).first().id
-            if i > 0:
-                self.assertEqual(old_id + 1, new_id)
+            self.assertEqual(old_id + 1, new_id)
             old_id = new_id
 
     def test_id_is_unique(self) -> None:
         """Test of id uniqueness"""
-        name = 'test'
-        db.session.add(Administrator(name=name))
-        db.session.commit()
-        target_id = db.session.query(Administrator) \
-            .filter_by(name=name).first().id
-        db.session.add(Administrator(id=target_id))
-        with self.assertRaises(IntegrityError):
+        db.session.add(Administrator(id=self.admin_in_db.id))
+        with self.assertRaises(FlushError):
             db.session.commit()
 
     def test_name_can_set(self) -> None:
         """Test of setting name"""
-        name = 'test'
-        db.session.add(Administrator(name=name))
-        db.session.commit()
-        admin_in_db = db.session.query(Administrator)\
-            .filter_by(name=name).first()
-        self.assertEqual(name, admin_in_db.name)
+        self.assertEqual(self.test_info['name'],
+                         self.admin_in_db.name)
 
     def test_name_unique(self) -> None:
         """Test of name uniqueness"""
-        name = 'test'
-        db.session.add_all([Administrator(name=name),
-                            Administrator(name=name)])
+        db.session.add(Administrator(**self.test_info))
         with self.assertRaises(IntegrityError):
             db.session.commit()
 
@@ -79,24 +73,23 @@ class AdministratorModelTestCase(unittest.TestCase):
 
     def test_password_setter(self) -> None:
         """Test of setting password"""
-        admin = Administrator(password='test')
-        self.assertTrue(admin.password_hash is not None)
+        self.assertTrue(self.admin_in_db.password_hash is not None)
 
     def test_password_inaccessible(self) -> None:
         """Test of password inaccessibility"""
-        admin = Administrator(password='test')
         with self.assertRaises(AttributeError):
-            _password = admin.password
+            _password = self.admin_in_db.password
 
     def test_password_verification(self) -> None:
         """Test of verifying password"""
-        admin = Administrator(password='test')
-        self.assertTrue(admin.verify_password('test'))
-        self.assertFalse(admin.verify_password('wrong'))
+        self.assertTrue(
+            self.admin_in_db.verify_password(
+                self.test_info['password']))
+        self.assertFalse(self.admin_in_db.verify_password('wrong'))
 
     def test_password_hash_is_unique(self) -> None:
         """Test of password hash uniqueness"""
-        admin1 = Administrator(password='test')
-        admin2 = Administrator(password='test')
-        self.assertNotEqual(admin1.password_hash,
-                            admin2.password_hash)
+        same_password_admin = Administrator(
+            password=self.test_info['password'])
+        self.assertNotEqual(same_password_admin.password_hash,
+                            self.admin_in_db.password_hash)

@@ -10,7 +10,7 @@ class Feedback(db.Model):
     """The Feedback model"""
     __tablename__ = 'feedbacks'
     id = db.Column(db.Integer, primary_key=True)
-    _email = db.Column(db.String(length=64), unique=True, index=True)
+    _email = db.Column(db.String(length=64), index=True)
     _title = db.Column(db.Unicode(128))
     content = db.Column(db.UnicodeText)
     _token = db.Column(db.String(64), unique=True, index=True)
