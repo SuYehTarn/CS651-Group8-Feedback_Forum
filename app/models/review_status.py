@@ -1,9 +1,12 @@
 """Module of the review status model
 """
 
+from flask import current_app
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import synonym
-from app import db
+from sqlalchemy.orm.exc import FlushError
 
+from app import db
 
 class ReviewStatus(db.Model):
     """The ReviewStatus model"""
@@ -27,3 +30,15 @@ class ReviewStatus(db.Model):
 
     def __repr__(self) -> str:
         return f'<ReviewStatus {self.name}>'
+
+    @staticmethod
+    def insert_review_status() -> None:
+        """Insert default review statuses"""
+        review_statuses = current_app.config.get('REVIEW_STATUSES')
+        for name in review_statuses:
+            try:
+                review_status = ReviewStatus(name=name)
+                db.session.add(review_status)
+                db.session.commit()
+            except (IntegrityError, FlushError) as exc:
+                print(exc)

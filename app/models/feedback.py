@@ -15,8 +15,11 @@ class Feedback(db.Model):
     content = db.Column(db.UnicodeText)
     _token = db.Column(db.String(64), unique=True, index=True)
     response = db.Column(db.UnicodeText)
-    review_status_id = db.Column(db.Integer, db.ForeignKey('reviewStatuses.id'))
-    reviewer_id = db.Column(db.Integer, db.ForeignKey('administrators.id'))
+    review_status_id = db.Column(db.Integer,
+                                 db.ForeignKey('reviewStatuses.id'),
+                                 default=1)
+    reviewer_id = db.Column(db.Integer,
+                            db.ForeignKey('administrators.id'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
