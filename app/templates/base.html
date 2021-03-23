@@ -1,0 +1,35 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+   {{ super() }}
+{% endblock %}
+
+{% block title %} Feedback Forum {% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">PROVIDE FEEDBACK</a></li>
+                <li><a href="/check">CHECK FEEDBACK STATUS</a></li>
+                <li><a href="/about">ABOUT</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h3>Hello,Please Submit your feedback here!!! </h3>
+        <br>
+        {{ wtf.quick_form(form) }}
+    </div>
+</div>
+
+{% endblock %}
+
