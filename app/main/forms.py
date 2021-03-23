@@ -4,7 +4,7 @@ from wtforms import *
 from wtforms.validators import *
 
 
-class Feedback(FlaskForm):
+class FeedbackForm(FlaskForm):
     Email = StringField('Email', validators=[DataRequired(), Length(1, 64),
                                              Email()])
     Title = StringField('Title', validators=[DataRequired()])

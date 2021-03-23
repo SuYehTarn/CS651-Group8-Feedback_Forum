@@ -1,6 +1,6 @@
 from . import main
 from app.models.feedback import Feedback
-from .forms import *
+from .forms import FeedbackForm, FeedbackCheck, FeedbackResponse
 from flask import render_template, redirect, request, url_for, flash,session
 from app import db
 
@@ -8,15 +8,18 @@ from app import db
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    form = Feedback()
+    form = FeedbackForm()
     if form.validate_on_submit():
-       #  NewFeedback = Feedback(_email=form.Email.data,_title=form.Title.data,content=form.Content.data)
-       #  flash('Your FeedBack is added Successfully')
-       #  db.session.add(NewFeedback)
-       #  db.session.commit()
-       #  newFeedback = Feedback.query.filterby(email=form.Email.data).first()
-         return render_template('success.html')
-    return render_template('base.html', form=form, name=session.get('Email'))
+       NewFeedback = Feedback(email=form.Email.data,
+                              title=form.Title.data,
+                              content=form.Content.data)
+       flash('Your FeedBack is added Successfully')
+       db.session.add(NewFeedback)
+       db.session.commit()
+       newFeedback = Feedback.query.filter_by(email=form.Email.data).first()
+       token = newFeedback.token
+       return render_template('success.html', token=token)
+    return render_template('base.html', form=form)
 
 @main.route('/about')
 def hello1():

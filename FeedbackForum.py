@@ -10,6 +10,9 @@ from app.models.review_status import ReviewStatus
 
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app_context = app.app_context()
+app_context.push()
+db.create_all()
 
 
 @app.shell_context_processor
