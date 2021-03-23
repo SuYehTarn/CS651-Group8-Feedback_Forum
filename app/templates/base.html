@@ -1,35 +1,45 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block head %}
-   {{ super() }}
-{% endblock %}
-
-{% block title %} Feedback Forum {% endblock %}
+{% block title %}Feedback Forum {% block subtitle %}{% endblock %}{% endblock %}
 
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle"
+         data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">Feedback Forum</a>
+    </div>
     <div class="container">
-
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">PROVIDE FEEDBACK</a></li>
-                <li><a href="/check">CHECK FEEDBACK STATUS</a></li>
-                <li><a href="/about">ABOUT</a></li>
+                {% block nav_links %}{% endblock %}
             </ul>
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock navbar %}
 
 {% block content %}
 <div class="container">
-    <div class="page-header">
-        <h3>Hello,Please Submit your feedback here!!! </h3>
-        <br>
-        {{ wtf.quick_form(form) }}
+
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
     </div>
+    {% endfor %}
+
+    <div class="page-header">
+        <h1>{% block page_header %}{% endblock %}</h1>
+    </div>
+
+    {% block page_content %}{% endblock %}
+
 </div>
-
 {% endblock %}
-

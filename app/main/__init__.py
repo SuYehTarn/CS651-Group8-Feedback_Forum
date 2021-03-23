@@ -1,5 +1,7 @@
+"""Module of the Main blueprint
+"""
 from flask import Blueprint
 
 main = Blueprint('main', __name__)
 
-from . import views,forms
+from app.main import views

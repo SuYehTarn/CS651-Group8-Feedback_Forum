@@ -118,5 +118,5 @@ class FeedbackModelTestCase(unittest.TestCase):
                 .update({'token': self.test_feedback_in_db.token})
 
     def test_review_status_default_one(self) -> None:
-        """Test of the default value of review status"""
+        """Test of the default value of admin status"""
         self.assertEqual(1, self.test_feedback_in_db.review_status_id)

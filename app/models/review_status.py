@@ -1,4 +1,4 @@
-"""Module of the review status model
+"""Module of the admin status model
 """
 
 from flask import current_app
@@ -7,6 +7,7 @@ from sqlalchemy.orm import synonym
 from sqlalchemy.orm.exc import FlushError
 
 from app import db
+
 
 class ReviewStatus(db.Model):
     """The ReviewStatus model"""
@@ -33,7 +34,7 @@ class ReviewStatus(db.Model):
 
     @staticmethod
     def insert_review_status() -> None:
-        """Insert default review statuses"""
+        """Insert default admin statuses"""
         review_statuses = current_app.config.get('REVIEW_STATUSES')
         for name in review_statuses:
             try:

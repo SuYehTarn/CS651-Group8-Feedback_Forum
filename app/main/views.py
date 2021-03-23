@@ -1,36 +1,57 @@
-from . import main
-from app.models.feedback import Feedback
-from .forms import FeedbackForm, FeedbackCheck, FeedbackResponse
-from flask import render_template, redirect, request, url_for, flash,session
-from app import db
+"""The module of the routes of the Main blueprint
+"""
+from flask import render_template, flash, session
+from sqlalchemy.exc import SQLAlchemyError
 
+from app import db
+from app.main import main
+from app.models.feedback import Feedback
+from app.main.forms import FeedbackForm, FeedbackCheck, FeedbackResponse
 
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
+    """View of providing a feedback from the client side"""
     form = FeedbackForm()
     if form.validate_on_submit():
-       NewFeedback = Feedback(email=form.Email.data,
-                              title=form.Title.data,
-                              content=form.Content.data)
-       flash('Your FeedBack is added Successfully')
-       db.session.add(NewFeedback)
-       db.session.commit()
-       newFeedback = Feedback.query.filter_by(email=form.Email.data).first()
-       token = newFeedback.token
-       return render_template('success.html', token=token)
-    return render_template('base.html', form=form)
+        try:
+            new_feedback = Feedback(email=form.Email.data,
+                                    title=form.Title.data,
+                                    content=form.Content.data)
+            db.session.add(new_feedback)
+            db.session.commit()
+
+            committed_feedback = Feedback.query \
+                .filter_by(email=form.Email.data).first()
+            token = committed_feedback.token
+
+            flash('Your Feedback is added Successfully')
+            return render_template('/main/success.html',
+                                   token=token)
+
+        except SQLAlchemyError:
+            flash('Failed to give a Feedback')
+
+    return render_template('/main/index.html',
+                           form=form)
+
 
 @main.route('/about')
-def hello1():
-    return render_template('about.html')
+def about():
+    """View of presenting the about us page"""
+    return render_template('/main/about.html')
 
-@main.route('/check',methods=['GET', 'POST'])
-def hello2():
+
+@main.route('/check', methods=['GET', 'POST'])
+def check():
+    """View of checking the feedback information
+    from the client side
+    """
     form = FeedbackCheck()
     if form.validate_on_submit():
         session['Token'] = form.Token.data
-        return render_template('Response.html',form=FeedbackResponse())
-    return render_template('check.html', form=form, name=session.get('Token'))
-
-
+        return render_template('/main/response.html',
+                               form=FeedbackResponse())
+    return render_template('/main/check.html',
+                           form=form,
+                           name=session.get('Token'))

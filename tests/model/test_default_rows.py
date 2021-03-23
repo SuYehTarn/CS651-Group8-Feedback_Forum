@@ -24,7 +24,7 @@ class AdminBlueprintTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def test_insert_review_status(self) -> None:
-        """Test of insertion of default review statuses"""
+        """Test of insertion of default admin statuses"""
         ReviewStatus.insert_review_status()
         review_statuses = db.session.query(ReviewStatus).all()
         self.assertEqual(set(current_app.config.get('REVIEW_STATUSES')),

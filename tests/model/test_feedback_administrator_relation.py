@@ -25,7 +25,7 @@ class ModelRelationTestCase(unittest.TestCase):
         self.reviewer_in_db = db.session.query(Administrator)\
             .filter_by(name=reviewer_name).first()
 
-        # create a review status
+        # create a admin status
         status_name = 'status'
         review_status = ReviewStatus(name=status_name)
         db.session.add(review_status)
@@ -55,7 +55,7 @@ class ModelRelationTestCase(unittest.TestCase):
 
         self.assertEqual(feedback_in_db.review_status_id,
                          self.review_status_in_db.id,
-                         'fail to refer a review status for a feedback')
+                         'fail to refer a admin status for a feedback')
 
     def test_link_all_feedbacks(self) -> None:
         """Test of access all feedbacks reviewed by a administrator"""
@@ -75,4 +75,4 @@ class ModelRelationTestCase(unittest.TestCase):
         related_feedback_ids = [f.id for f in self.review_status_in_db.feedbacks]
         self.assertEqual(set(feedback_ids_in_db),
                          set(related_feedback_ids),
-                         'the related feedbacks not correct for a review status')
+                         'the related feedbacks not correct for a admin status')

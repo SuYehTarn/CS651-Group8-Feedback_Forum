@@ -1,0 +1,13 @@
+{% extends "backstage.html" %}
+
+{% block subtitle %}- Backstage{% endblock %}
+
+{% block page_header %}#{{ feedback.id }} {{ feedback.title }}{% endblock %}
+
+{% block page_content %}
+
+    <p class="fw-bold">{{ feedback.content }}</p>
+
+    {{ wtf.quick_form(form) }}
+
+{% endblock %}

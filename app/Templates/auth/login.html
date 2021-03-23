@@ -1,0 +1,11 @@
+{% extends "backstage.html" %}
+
+{% block subtitle %}- Login{% endblock %}
+
+{% block page_header %}Login{% endblock %}
+
+{% block page_content %}
+
+    {{ wtf.quick_form(form) }}
+
+{% endblock %}

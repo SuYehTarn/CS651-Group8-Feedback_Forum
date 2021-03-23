@@ -1,0 +1,13 @@
+{% extends "frontend.html" %}
+
+{% block subtitle %}- Check Review Status{% endblock %}
+
+{% block page_header %}Check Review Status{% endblock %}
+
+{% block page_content %}
+
+    <h3>Please enter the token number of your feedback</h3>
+
+    {{ wtf.quick_form(form) }}
+
+{% endblock %}

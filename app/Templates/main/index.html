@@ -1,0 +1,13 @@
+{% extends "frontend.html" %}
+
+{% block subtitle %}- Provide Feedback{% endblock %}
+
+{% block page_header %}Provide Feedback{% endblock %}
+
+{% block page_content %}
+
+    <h3>Hello, please submit your feedback here. </h3>
+
+    {{ wtf.quick_form(form) }}
+
+{% endblock %}

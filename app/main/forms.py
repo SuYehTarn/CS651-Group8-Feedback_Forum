@@ -1,23 +1,33 @@
+"""Module contains the flask forms for Main blueprint
+"""
 from flask_wtf import FlaskForm
-
-from wtforms import *
-from wtforms.validators import *
+from wtforms import  StringField, TextAreaField, SubmitField
+from wtforms.validators import DataRequired, Email, Length
 
 
 class FeedbackForm(FlaskForm):
-    Email = StringField('Email', validators=[DataRequired(), Length(1, 64),
+    """The class of the flask form for providing
+    a feedback from the client side
+    """
+    Email = StringField('Email', validators=[DataRequired(),
+                                             Length(1, 64),
                                              Email()])
     Title = StringField('Title', validators=[DataRequired()])
-    Content =TextAreaField('Content', validators=[DataRequired()])
+    Content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+
 class FeedbackCheck(FlaskForm):
-    Token = StringField('Token',validators=[DataRequired()])
+    """The class of the flask form for checking
+    a feedback from the client side
+    """
+    Token = StringField('Token', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class FeedbackResponse(FlaskForm):
+    """The class of the flask for for presenting
+    the feedback information to the client
+    """
     Status = StringField('Status')
     Response = StringField('Response')
-
-

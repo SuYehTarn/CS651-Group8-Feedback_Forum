@@ -3,6 +3,7 @@
 
 import uuid
 from sqlalchemy.orm import synonym
+
 from app import db
 
 

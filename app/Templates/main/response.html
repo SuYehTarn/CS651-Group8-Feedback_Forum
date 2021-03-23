@@ -1,0 +1,11 @@
+{% extends "frontend.html" %}
+
+{% block subtitle %}- Your Feedback{% endblock %}
+
+{% block page_header %}Your Feedback{% endblock %}
+
+{% block page_content %}
+
+    {{ wtf.quick_form(form) }}
+
+{% endblock %}

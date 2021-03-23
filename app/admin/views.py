@@ -8,20 +8,20 @@ from app import db
 from app.admin.form import ReviewFeedbackForm
 from app.models.feedback import Feedback
 
-from . import admin
+from app.admin import admin
 
 
-@admin.route('/review')
-@admin.route('/review/')
+@admin.route('/admin')
+@admin.route('/admin/')
 #@login_required
 def index():
     """View of list all feedbacks"""
     all_feedbacks = db.session.query(Feedback).all()
-    return render_template('/review/index.html',
+    return render_template('/admin/index.html',
                            feedbacks=all_feedbacks)
 
 
-@admin.route('/review/<feedback_id>')
+@admin.route('/admin/<feedback_id>')
 #@login_required
 def read_feedback(feedback_id):
     """View of reading a feedback"""
@@ -31,6 +31,6 @@ def read_feedback(feedback_id):
         flash('Wrong feedback ID')
         return redirect(url_for('admin.index'))
     form = ReviewFeedbackForm()
-    return render_template('/review/feedback.html',
+    return render_template('/admin/feedback.html',
                            feedback=feedback,
                            form=form)

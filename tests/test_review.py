@@ -46,11 +46,11 @@ class AdminBlueprintTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def test_review_all_feedback_page(self) -> None:
-        """Test for the route /review/"""
-        response = self.client.get('/review')
+        """Test for the route /admin/"""
+        response = self.client.get('/admin')
         self.assertTrue(response.status_code, 308)
 
-        for url in ['/review', '/review/']:
+        for url in ['/admin', '/admin/']:
             response = self.client.get(url,
                                        follow_redirects=True)
             self.assertEqual(response.status_code, 200)
@@ -59,10 +59,10 @@ class AdminBlueprintTestCase(unittest.TestCase):
                 self.assertTrue(info['title'] in text)
 
     def test_review_a_feedback(self) -> None:
-        """Test for the route /review/<feedback_id>"""
+        """Test for the route /admin/<feedback_id>"""
         feedbacks = db.session.query(Feedback).all()
         for feedback in feedbacks:
-            response = self.client.get(f'/review/{feedback.id}')
+            response = self.client.get(f'/admin/{feedback.id}')
             text = response.get_data(as_text=True)
             self.assertTrue(feedback.title in text)
             self.assertTrue(feedback.content in text)
@@ -73,8 +73,8 @@ class AdminBlueprintTestCase(unittest.TestCase):
         while id_not_exists in existed_id:
             id_not_exists += len(existed_id)
 
-        response = self.client.get(f'/review/{id_not_exists}')
+        response = self.client.get(f'/admin/{id_not_exists}')
         self.assertTrue(response.status_code, 308)
 
         url = urlparse(response.location)
-        self.assertEqual(url.path, '/review/')
+        self.assertEqual(url.path, '/admin/')
