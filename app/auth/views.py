@@ -1,6 +1,10 @@
+from flask import render_template
+from .forms import *
 from . import auth
 
 
 @auth.route('/auth')
 def hello():
-    return 'This is auth page'
+    form = LoginForm()
+
+    return render_template('auth.html', form=form)
