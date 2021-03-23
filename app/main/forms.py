@@ -9,11 +9,11 @@ class FeedbackForm(FlaskForm):
     """The class of the flask form for providing
     a feedback from the client side
     """
-    Email = StringField('Email', validators=[DataRequired(),
+    email = StringField('Email', validators=[DataRequired(),
                                              Length(1, 64),
                                              Email()])
-    Title = StringField('Title', validators=[DataRequired()])
-    Content = TextAreaField('Content', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 

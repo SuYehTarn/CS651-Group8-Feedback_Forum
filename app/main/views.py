@@ -15,14 +15,17 @@ def index():
     form = FeedbackForm()
     if form.validate_on_submit():
         try:
-            new_feedback = Feedback(email=form.Email.data,
-                                    title=form.Title.data,
-                                    content=form.Content.data)
+            data = {
+                'email': form.email.data,
+                'title': form.title.data,
+                'content': form.content.data,
+            }
+            new_feedback = Feedback(**data)
             db.session.add(new_feedback)
             db.session.commit()
 
             committed_feedback = Feedback.query \
-                .filter_by(email=form.Email.data).first()
+                .filter_by(**data).first()
             token = committed_feedback.token
 
             flash('Your Feedback is added Successfully')
