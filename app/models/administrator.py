@@ -57,17 +57,25 @@ class Administrator(UserMixin, db.Model):
     @staticmethod
     def insert_administrator() -> None:
         """Insert default administrator"""
+        default = {
+            'name': 'admin',
+            'password': 'admin'
+        }
         admin_name = current_app.config.get('ADMIN_NAME')
         admin_password = current_app.config.get('ADMIN_PASSWORD')
         if admin_name is None and admin_password is None:
-            print('Missing admin name or password.')
-            print('Use default settings.')
-            admin_name = 'admin'
-            admin_password = 'admin'
+            print('Missing admin name or password. '
+                  'Use default admin account.')
+            admin_name = default['name']
+            admin_password = default['password']
         try:
             admin = Administrator(name=admin_name,
                                   password=admin_password)
             db.session.add(admin)
             db.session.commit()
         except (IntegrityError, FlushError) as exc:
-            print(exc)
+            db.session.rollback()
+            if admin_name != default['name']:
+                print('Administrator already exists.')
+            if current_app.config.get('TESTING'):
+                print(exc)

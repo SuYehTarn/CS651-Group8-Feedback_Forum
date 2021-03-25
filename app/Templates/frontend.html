@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block nav_links %}
-<li><a href="{{ url_for('main.index') }}">PROVIDE FEEDBACK</a></li>
-<li><a href="{{ url_for('main.check')}}">CHECK FEEDBACK</a></li>
-<li><a href="{{ url_for('main.about') }}">ABOUT</a></li>
+<ul class="nav navbar-nav">
+    <li><a href="{{ url_for('main.index') }}">PROVIDE FEEDBACK</a></li>
+    <li><a href="{{ url_for('main.check')}}">CHECK FEEDBACK</a></li>
+    <li><a href="{{ url_for('main.about') }}">ABOUT</a></li>
+</ul>
 {% endblock %}

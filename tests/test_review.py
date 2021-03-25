@@ -3,11 +3,11 @@
 
 import unittest
 from urllib.parse import urlparse
-#from flask_login import login_user, current_user
 
 from app import create_app, db
 from app.models.feedback import Feedback
 from app.models.administrator import Administrator
+from app.models.review_status import ReviewStatus
 
 
 class AdminBlueprintTestCase(unittest.TestCase):
@@ -18,6 +18,9 @@ class AdminBlueprintTestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
+        Administrator.insert_administrator()
+        ReviewStatus.insert_review_status()
+
         self.client = self.app.test_client(use_cookies=True)
 
         # create some feedbacks for testing
@@ -31,15 +34,6 @@ class AdminBlueprintTestCase(unittest.TestCase):
             db.session.add(Feedback(**info))
             db.session.commit()
 
-        # create an admin for testing
-        self.test_admin_info = {
-            'name': 'test admin',
-            'password': 'test password',
-        }
-        db.session.add(Administrator(**self.test_admin_info))
-        db.session.commit()
-        self.admin = db.session.query(Administrator).first()
-
     def tearDown(self) -> None:
         db.session.remove()
         db.drop_all()
@@ -47,6 +41,14 @@ class AdminBlueprintTestCase(unittest.TestCase):
 
     def test_review_all_feedback_page(self) -> None:
         """Test for the route /admin/"""
+
+        # login administrator and save the session
+        with self.client as client:
+            client.post('/login/', data={
+                'name': 'admin',
+                'password': 'admin',
+            })
+
         response = self.client.get('/admin')
         self.assertTrue(response.status_code, 308)
 
@@ -60,6 +62,14 @@ class AdminBlueprintTestCase(unittest.TestCase):
 
     def test_review_a_feedback(self) -> None:
         """Test for the route /admin/<feedback_id>"""
+
+        # login administrator and save the session
+        with self.client as client:
+            client.post('/login/', data={
+                'name': 'admin',
+                'password': 'admin',
+            })
+
         feedbacks = db.session.query(Feedback).all()
         for feedback in feedbacks:
             response = self.client.get(f'/admin/{feedback.id}')

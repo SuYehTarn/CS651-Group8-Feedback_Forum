@@ -13,6 +13,8 @@ app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 app_context = app.app_context()
 app_context.push()
 db.create_all()
+Administrator.insert_administrator()
+ReviewStatus.insert_review_status()
 
 
 @app.shell_context_processor

@@ -42,4 +42,11 @@ class ReviewStatus(db.Model):
                 db.session.add(review_status)
                 db.session.commit()
             except (IntegrityError, FlushError) as exc:
-                print(exc)
+                db.session.rollback()
+                if current_app.config.get('TESTING'):
+                    print(exc)
+            finally:
+                review_status = ReviewStatus.query \
+                    .filter_by(name=name).first()
+                print('Create Review Status: '
+                      f'({review_status.id}, {review_status.name})')
