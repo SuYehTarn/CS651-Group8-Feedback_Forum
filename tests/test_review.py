@@ -74,15 +74,29 @@ class AdminBlueprintTestCase(unittest.TestCase):
             })
 
         feedbacks = db.session.query(Feedback).all()
+
+        # check the content of each feedback
         for feedback in feedbacks:
             response = self.client.get(f'/admin/{feedback.id}')
             text = response.get_data(as_text=True)
+            self.assertTrue(str(feedback.id) in text,
+                            ('cannot find the correct '
+                             'feedback id in the response'))
             self.assertTrue(feedback.title in text,
                             ('cannot find the correct '
                              'feedback title in the response'))
             self.assertTrue(feedback.content in text,
                             ('cannot find the correct '
                              'feedback content in the response'))
+            status = ReviewStatus.query \
+                .filter_by(id=feedback.review_status_id).first()
+            self.assertTrue(status.name in text,
+                            ('cannot find the correct '
+                             'review status name in the response'))
+            if feedback.response:
+                self.assertTrue(feedback.response in text,
+                                ('cannot find the correct '
+                                 'admin response in the response'))
 
         # test for the wrong id
         existed_id = [feedback.id for feedback in feedbacks]
@@ -97,3 +111,47 @@ class AdminBlueprintTestCase(unittest.TestCase):
         url = urlparse(response.location)
         self.assertTrue(url.path in ('/admin/', '/admin'),
                         'wrong routing')
+
+    def test_reply_to_a_feedback(self) -> None:
+        """Test for the POST method to the route /admin/<feedback_id>"""
+
+        # login administrator and save the session
+        with self.client as client:
+            client.post('/login/', data={
+                'name': 'admin',
+                'password': 'admin',
+            })
+
+        review_status = ReviewStatus.query.all()
+        data_list = [{
+            'review_status': status.id,
+            'response': f'response{status.id}',
+        } for status in review_status]
+        feedbacks = Feedback.query.all()[:len(data_list)]
+
+        # post the response and review statuses
+        for data, feedback in zip(data_list, feedbacks):
+            self.client.post(f'/admin/{feedback.id}',
+                             data=data)
+
+            # check if the database is modified as expectation
+            feedback_in_db = Feedback.query \
+                .filter_by(id=feedback.id).first()
+            self.assertEqual(data['response'],
+                             feedback_in_db.response,
+                             'response not correct')
+            self.assertEqual(data['review_status'],
+                             feedback_in_db.review_status_id,
+                             'review status not correct')
+
+            # check if the view is renewed
+            response = self.client.get(f'/admin/{feedback.id}')
+            text = response.get_data(as_text=True)
+            status = ReviewStatus.query \
+                .filter_by(id=data['review_status']).first()
+            self.assertTrue(status.name in text,
+                            ('cannot find the correct '
+                             'review status name in the response'))
+            self.assertTrue(data['response'] in text,
+                            ('cannot find the correct '
+                             'admin response in the response'))
