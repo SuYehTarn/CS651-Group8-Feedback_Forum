@@ -53,24 +53,25 @@ def about():
     return render_template('/main/about.html')
 
 
-@main.route('/check', methods=['GET', 'POST'])
+@main.route('/check/', methods=['GET', 'POST'])
 def check():
     """View of checking the feedback information
     from the client side
     """
     form = FeedbackCheck()
     if form.validate_on_submit():
-        token = form.Token.data
+        token = form.token.data
         feedback = Feedback.query.filter_by(token=token).first()
         if feedback is not None:
-            feedback_response = FeedbackResponse()
             status = ReviewStatus.query \
                 .filter_by(id=feedback.review_status_id).first()
-            feedback_response.Status.default = status.name
-            feedback_response.Response.default = feedback.response
+            feedback_response = FeedbackResponse()
             feedback_response.id.default = feedback.id
             feedback_response.title.default = feedback.title
             feedback_response.content.default = feedback.content
+            feedback_response.email.default = feedback.email
+            feedback_response.Status.default = status.name
+            feedback_response.Response.default = feedback.response
             feedback_response.process()
             return render_template('/main/response.html',
                                    form=feedback_response)

@@ -82,6 +82,9 @@ class AdminBlueprintTestCase(unittest.TestCase):
             self.assertTrue(str(feedback.id) in text,
                             ('cannot find the correct '
                              'feedback id in the response'))
+            self.assertTrue(str(feedback.email) in text,
+                            ('cannot find the correct '
+                             'feedback email in the response'))
             self.assertTrue(feedback.title in text,
                             ('cannot find the correct '
                              'feedback title in the response'))

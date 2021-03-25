@@ -10,6 +10,7 @@ from wtforms import (SubmitField, TextAreaField,
 class ReviewFeedbackForm(FlaskForm):
     """The class of the flask form for reviewing feedback"""
     id = IntegerField(render_kw={'disabled': ""})
+    email = StringField(render_kw={'disabled': ""})
     title = StringField(render_kw={'disabled': ""})
     content = TextAreaField(render_kw={'disabled': ""})
     review_status = SelectField()

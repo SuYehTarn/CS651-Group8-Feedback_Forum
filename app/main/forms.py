@@ -21,7 +21,7 @@ class FeedbackCheck(FlaskForm):
     """The class of the flask form for checking
     a feedback from the client side
     """
-    Token = StringField('Token', validators=[DataRequired()])
+    token = StringField('Token', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
@@ -30,6 +30,7 @@ class FeedbackResponse(FlaskForm):
     the feedback information to the client
     """
     id = IntegerField(render_kw={'disabled': ""})
+    email = StringField(render_kw={'disabled': ""})
     title = StringField(render_kw={'disabled': ""})
     content = TextAreaField(render_kw={'disabled': ""})
     Status = StringField(render_kw={'disabled': ""})

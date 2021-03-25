@@ -51,6 +51,7 @@ def read_feedback(feedback_id):
     form.review_status.default = feedback.review_status_id
     form.response.default = feedback.response
     form.id.default = feedback.id
+    form.email.default = feedback.email
     form.title.default = feedback.title
     form.content.default = feedback.content
     form.process()
