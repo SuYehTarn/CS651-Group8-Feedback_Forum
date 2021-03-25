@@ -60,7 +60,7 @@ class Feedback(db.Model):
 
     @token.setter
     def token(self, _data=None) -> None:
-        self._token = uuid.uuid4().bytes
+        self._token = str(uuid.uuid4().int)
         assert len(self._token) <= 64, 'exceed the token length limit of 64.'
 
     token = synonym('_token', descriptor=token)

@@ -16,8 +16,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     FEEDBACK_FORUM_MAIL_SUBJECT_PREFIX = '[Feedback Forum]'
-    FEEDBACK_FORUM_MAIL_SENDER = 'Feedback Forum Admin <cs651-group8@gmail.com>'
-    FEEDBACK_FORUM_ADMIN = os.environ.get('FEEDBACK_FORUM_ADMIN')
+    FEEDBACK_FORUM_MAIL_SENDER = 'Feedback Forum'
 
     # DataBase
     SQLALCHEMY_TRACK_MODIFICATIONS = False

@@ -1,7 +1,7 @@
 """Module contains the flask forms for Main blueprint
 """
 from flask_wtf import FlaskForm
-from wtforms import  StringField, TextAreaField, SubmitField
+from wtforms import  StringField, TextAreaField, SubmitField, IntegerField
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -29,5 +29,8 @@ class FeedbackResponse(FlaskForm):
     """The class of the flask for for presenting
     the feedback information to the client
     """
-    Status = StringField('Status')
-    Response = StringField('Response')
+    id = IntegerField(render_kw={'disabled': ""})
+    title = StringField(render_kw={'disabled': ""})
+    content = TextAreaField(render_kw={'disabled': ""})
+    Status = StringField(render_kw={'disabled': ""})
+    Response = StringField(render_kw={'disabled': ""})

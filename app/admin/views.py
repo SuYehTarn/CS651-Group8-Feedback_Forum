@@ -45,6 +45,7 @@ def read_feedback(feedback_id):
         feedback.response = form.response.data
         feedback.review_status_id = form.review_status.data
         db.session.commit()
+        flash('Modification saved.')
 
     # set default values
     form.review_status.default = feedback.review_status_id

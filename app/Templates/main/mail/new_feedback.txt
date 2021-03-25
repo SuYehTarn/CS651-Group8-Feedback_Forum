@@ -1,0 +1,4 @@
+Thank you for your feedback.
+Token number: {{ token }}
+You can check the review status with this token in the Feedback Forum -> Check feedback.
+This email is automatically sent. Please do not reply this email.

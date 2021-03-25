@@ -1,12 +1,15 @@
 """The module of the routes of the Main blueprint
 """
-from flask import render_template, flash, session
+from flask import render_template, flash
 from sqlalchemy.exc import SQLAlchemyError
 
 from app import db
 from app.main import main
 from app.models.feedback import Feedback
+from app.models.review_status import ReviewStatus
 from app.main.forms import FeedbackForm, FeedbackCheck, FeedbackResponse
+
+from app.email import send_email
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -27,6 +30,11 @@ def index():
             committed_feedback = Feedback.query \
                 .filter_by(**data).first()
             token = committed_feedback.token
+
+            send_email(data['email'],
+                       'Thank you for your feedback.',
+                       'main/mail/new_feedback',
+                       token=token)
 
             flash('Your Feedback is added Successfully')
             return render_template('/main/success.html',
@@ -52,9 +60,20 @@ def check():
     """
     form = FeedbackCheck()
     if form.validate_on_submit():
-        session['Token'] = form.Token.data
-        return render_template('/main/response.html',
-                               form=FeedbackResponse())
+        token = form.Token.data
+        feedback = Feedback.query.filter_by(token=token).first()
+        if feedback is not None:
+            feedback_response = FeedbackResponse()
+            status = ReviewStatus.query \
+                .filter_by(id=feedback.review_status_id).first()
+            feedback_response.Status.default = status.name
+            feedback_response.Response.default = feedback.response
+            feedback_response.id.default = feedback.id
+            feedback_response.title.default = feedback.title
+            feedback_response.content.default = feedback.content
+            feedback_response.process()
+            return render_template('/main/response.html',
+                                   form=feedback_response)
+        flash('Feedback not found.')
     return render_template('/main/check.html',
-                           form=form,
-                           name=session.get('Token'))
+                           form=form)

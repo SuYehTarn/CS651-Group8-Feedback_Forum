@@ -50,15 +50,18 @@ class AdminBlueprintTestCase(unittest.TestCase):
             })
 
         response = self.client.get('/admin')
-        self.assertTrue(response.status_code, 308)
+        self.assertTrue(response.status_code - 300 in range(0, 100),
+                        'miss of redirection')
 
         for url in ['/admin', '/admin/']:
             response = self.client.get(url,
                                        follow_redirects=True)
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, 200,
+                             'wrong status code')
             text = response.get_data(as_text=True)
             for info in self.test_info:
-                self.assertTrue(info['title'] in text)
+                self.assertTrue(info['title'] in text,
+                                f'feedback not found: {info["title"]}')
 
     def test_review_a_feedback(self) -> None:
         """Test for the route /admin/<feedback_id>"""
@@ -74,8 +77,12 @@ class AdminBlueprintTestCase(unittest.TestCase):
         for feedback in feedbacks:
             response = self.client.get(f'/admin/{feedback.id}')
             text = response.get_data(as_text=True)
-            self.assertTrue(feedback.title in text)
-            self.assertTrue(feedback.content in text)
+            self.assertTrue(feedback.title in text,
+                            ('cannot find the correct '
+                             'feedback title in the response'))
+            self.assertTrue(feedback.content in text,
+                            ('cannot find the correct '
+                             'feedback content in the response'))
 
         # test for the wrong id
         existed_id = [feedback.id for feedback in feedbacks]
@@ -84,7 +91,9 @@ class AdminBlueprintTestCase(unittest.TestCase):
             id_not_exists += len(existed_id)
 
         response = self.client.get(f'/admin/{id_not_exists}')
-        self.assertTrue(response.status_code, 308)
+        self.assertTrue(response.status_code - 300 in range(0, 100),
+                        'wrong http status code')
 
         url = urlparse(response.location)
-        self.assertEqual(url.path, '/admin/')
+        self.assertTrue(url.path in ('/admin/', '/admin'),
+                        'wrong routing')
