@@ -3,10 +3,12 @@
 
 import os
 import click
+
 from app import create_app, db
 from app.models.feedback import Feedback
 from app.models.administrator import Administrator
 from app.models.review_status import ReviewStatus
+
 
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
