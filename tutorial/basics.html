@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Forum Tutorial - Basic Files</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="d-flex justify-content-center py-3">
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a href="./index.html" class="nav-link active">Feedback Forum</a></li>
+        <li class="nav-item"><a href="./intro.html" class="nav-link">Introduction</a></li>
+        <li class="nav-item"><a href="./setup.html" class="nav-link">Setup</a></li>
+        <li class="nav-item"><a href="./basics.html" class="nav-link">Basic Files</a></li>
+        <li class="nav-item"><a href="./models.html" class="nav-link">Database Models</a></li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Blueprints</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="./main.html">Main</a></li>
+                <li><a class="dropdown-item" href="./admin.html">Admin</a></li>
+                <li><a class="dropdown-item" href="./auth.html">Auth</a></li>
+            </ul>
+        </li>
+        <li class="nav-item"><a href="./email.html" class="nav-link">Email Sending</a></li>
+    </ul>
+</header>
+
+<div class="container">
+    <h1>Basic Files</h1>
+    <p>We need to create some basic file to initialize a Flask application.</p>
+    <ul>
+        <li><b>app/__init__.py</b></li>
+        <li><b>config.py</b></li>
+        <li><b>FeedbackForum.py</b></li>
+    </ul>
+
+    <div class="container">
+        <h2>app/__init__.py</h2>
+        <p>We define an application factory <b>create_app</b> with <a href="https://github.com/SuYehTarn/CS651_Python_Flask_Group8/blob/main/app/__init__.py">this code</a>.</p>
+        <ul>
+            <li>We connect the Flask extensions with the app:
+                <ul>
+                    <li>SQLAlchemy from flask_sqlalchemy</li>
+                    <li>Bootstrap from flask_bootstrap</li>
+                    <li>Migrate from flask_migrate</li>
+                    <li>LoginManager from flask_login</li>
+                    <li>Mail from flask_mail</li>
+                </ul>
+            </li>
+            <li>We read the config file and set it as the app configuration.</li>
+            <li>We register the blueprints <b>main</b>, <b>admin</b>, and <b>auth</b>, which we create in the <a href="./main.html">Blueprints</a> section of this tutorial.</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>config.py</h2>
+        <p>We define a configuration file with <a href="https://github.com/SuYehTarn/CS651_Python_Flask_Group8/blob/main/config.py">this code</a>. This piece of code is referred to the Chapter 7 of “Flask Web Development, 2nd Edition”<a href="#1">[1]</a>. It is a well designed configuration file that can easily separate the settings for different modes. We modify some settings.</p>
+        <ul>
+            <li>We define a config class object gathering configurations from the environment or the default settings.</li>
+            <li>We separate some configurations for the development, testing, and production mode.</li>
+            <li>In convenience, we place the secret key in the code. Remember to delete the code and set another key in environment.</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>FeedbackForum.py</h2>
+        <p>We arrange a series of code to initialize the web app and run it on the server.</p>
+        <ul>
+            <li>We initialize the app with the app factory and set it as the app context.</li>
+            <li>We initialize the database with the model settings and insert some basic data rows. The design of model is discussed in the <a href="./models.html">Database Models</a> section.</li>
+            <li>We create a CLI for this web app.
+                <ul>
+                    <li>shell: using command <b>flask shell</b>, we can directly access the app context and doing database operations.</li>
+                    <li>test: using command <b>flask test</b>, we can run the unit tests if there is any. This tutorial does not cover the part of unit testing, you can refer on <a href="https://github.com/SuYehTarn/CS651_Python_Flask_Group8/tree/main/tests">this folder</a> containing some unit tests for the Feedback Forum.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>Reference</h2>
+        <ul>
+            <li><a name="1">[1]</a> “Flask Web Development, 2nd Edition”, Miguel Grinberg, O'Reilly Media, November, 2018, Chapter 7.
+                <br>This is a book that discusses developing web application in Flask framework. Miguel Grinberg is a professional Python software developer currently working for Twilio. O'Reilly is a popular publisher that has published various books related to software development.
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>

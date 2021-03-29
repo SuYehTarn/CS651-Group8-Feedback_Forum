@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Forum Tutorial - Setup</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="d-flex justify-content-center py-3">
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a href="./index.html" class="nav-link active">Feedback Forum</a></li>
+        <li class="nav-item"><a href="./intro.html" class="nav-link">Introduction</a></li>
+        <li class="nav-item"><a href="./setup.html" class="nav-link">Setup</a></li>
+        <li class="nav-item"><a href="./basics.html" class="nav-link">Basic Files</a></li>
+        <li class="nav-item"><a href="./models.html" class="nav-link">Database Models</a></li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Blueprints</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="./main.html">Main</a></li>
+                <li><a class="dropdown-item" href="./admin.html">Admin</a></li>
+                <li><a class="dropdown-item" href="./auth.html">Auth</a></li>
+            </ul>
+        </li>
+        <li class="nav-item"><a href="./email.html" class="nav-link">Email Sending</a></li>
+    </ul>
+</header>
+
+<div class="container">
+    <h1>Setup</h1>
+    <p>This section specifies the Python version and the required packages.</p>
+
+</div>
+
+<div class="container">
+    <h2>Python Installation</h2>
+    <p>Please download the Python installer from <a href="https://www.python.org/downloads/">here</a>. We are using the 3.9.2 version.</p>
+</div>
+
+<div class="container">
+    <h2>Requirements</h2>
+    <p>The followings are the required Python packages for the Feedback Forum.</p>
+    <ul>
+        <li>Flask==1.1.2</li>
+        <li>Flask-Bootstrap==3.3.7.1</li>
+        <li>Flask-Login==0.5.0</li>
+        <li>Flask-Mail==0.9.1</li>
+        <li>Flask-Migrate==2.7.0</li>
+        <li>Flask-SQLAlchemy==2.4.4</li>
+        <li>Flask-WTF==0.14.3</li>
+    </ul>
+    <p>After Python installation, install all the packages through the terminal with the instruction.</p>
+    <div class="container">
+        <pre><code class="my-3">pip install &lt;package name&gt;</code></pre>
+    </div>
+    <p>Plug in each package name listed above.</p>
+</div>
+</body>
+</html>

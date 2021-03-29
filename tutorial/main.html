@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Forum Tutorial - Main</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="d-flex justify-content-center py-3">
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a href="./index.html" class="nav-link active">Feedback Forum</a></li>
+        <li class="nav-item"><a href="./intro.html" class="nav-link">Introduction</a></li>
+        <li class="nav-item"><a href="./setup.html" class="nav-link">Setup</a></li>
+        <li class="nav-item"><a href="./basics.html" class="nav-link">Basic Files</a></li>
+        <li class="nav-item"><a href="./models.html" class="nav-link">Database Models</a></li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Blueprints</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="./main.html">Main</a></li>
+                <li><a class="dropdown-item" href="./admin.html">Admin</a></li>
+                <li><a class="dropdown-item" href="./auth.html">Auth</a></li>
+            </ul>
+        </li>
+        <li class="nav-item"><a href="./email.html" class="nav-link">Email Sending</a></li>
+    </ul>
+</header>
+
+<div class="container">
+    <h1>Main</h1>
+    <p>Main is the Flask blueprint for the client frontend use. We create files as the following picture.</p>
+    <img class="my-3 shadow-sm" src="img/main.png">
+    <ul>
+        <li>__init__.py: initializing the blueprint for importing from other place.</li>
+        <li>views.py: setting the routes and logics for HTTP requests.</li>
+        <li>forms.py: containing the form designed for receiving data from the client or presenting data for the client.</li>
+    </ul>
+</div>
+
+<div class="container">
+    <h2>__init__.py</h2>
+    <p>We initialize the blueprint with <a href="https://github.com/SuYehTarn/CS651_Python_Flask_Group8/blob/main/app/main/__init__.py">this code</a>.</p>
+    <p>We create a blueprint named <b>main</b>, import the route settings from the file <b>view.py</b>.</p>
+</div>
+
+<div class="container">
+    <h2>views.py</h2>
+    <p>We setting the routes and logics with <a href="https://github.com/SuYehTarn/CS651_Python_Flask_Group8/blob/main/app/main/views.py">this code</a>.</p>
+    <p>We defined three entry functions: index, check, and about.</p>
+
+    <div class="container">
+        <h3>index</h3>
+        <p>This is the entry function for the front page routing with the root url '/'. It accept GET and POST methods. If the request method is GET, it provides the feedback input form with the template '/main/index.html' to the client to fill up the information. If the request method is POST, it gathers the information from the request, create a instance of the feedback model, send an email containing the generated token to the client provided email address, finally, present the token with the template '/main/success.html'. If any exception occurs during the database operation, it returns the warning message to the client with the template '/main/index.html'.</p>
+    </div>
+
+    <div class="container">
+        <h3>check</h3>
+        <p>This is the entry function for the review status checking page routing with the url '/check/'. It accept GET and POST methods. If the request method is GET, it provides the token input form with the template '/main/check.html' to the client. If the request method is POST, it takes the token data from the request, tries to find the feedback with the token, and returns the feedback information with the template '/main/response.html' if the corresponding feedback exists, or returns the warning message with the template '/main/check.html' otherwise.</p>
+    </div>
+
+    <div class="container">
+        <h3>about</h3>
+        <p>This is the entry function that simply provide the information about this web app.</p>
+    </div>
+
+</div>
+
+<div class="container">
+    <h2>forms.py</h2>
+    <p>We design the relating forms with <a href="https://github.com/SuYehTarn/CS651_Python_Flask_Group8/blob/main/app/main/forms.py">this code</a>.</p>
+    <p>We defined three form classes with the FlaskForm class provided by flask-wtf: FeedbackForm, FeedbackCheck, and FeedbackResponse.</p>
+
+    <div class="container">
+        <h3>FeedbackForm</h3>
+        <p>This form contains three fields for filling the feedback information, and a submit button for sending the post request.</p>
+    </div>
+
+    <div class="container">
+        <h3>FeedbackCheck</h3>
+        <p>This form contains one field for filling the token information, and a submit button for sending the post request.</p>
+    </div>
+
+    <div class="container">
+        <h3>FeedbackResponse</h3>
+        <p>This form contains six field for formatting the feedback information to present to the client.</p>
+    </div>
+
+</div>
+
+</body>
+</html>

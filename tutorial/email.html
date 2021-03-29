@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Forum Tutorial - Email Sending</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="d-flex justify-content-center py-3">
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a href="./index.html" class="nav-link active">Feedback Forum</a></li>
+        <li class="nav-item"><a href="./intro.html" class="nav-link">Introduction</a></li>
+        <li class="nav-item"><a href="./setup.html" class="nav-link">Setup</a></li>
+        <li class="nav-item"><a href="./basics.html" class="nav-link">Basic Files</a></li>
+        <li class="nav-item"><a href="./models.html" class="nav-link">Database Models</a></li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Blueprints</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="./main.html">Main</a></li>
+                <li><a class="dropdown-item" href="./admin.html">Admin</a></li>
+                <li><a class="dropdown-item" href="./auth.html">Auth</a></li>
+            </ul>
+        </li>
+        <li class="nav-item"><a href="./email.html" class="nav-link">Email Sending</a></li>
+    </ul>
+</header>
+
+<div class="container">
+    <h1>Email Sending</h1>
+    <p>Email sending is a auxiliary function utilized to send the token to the client.</p>
+    <p>We create a file <b>email.py</b> under the folder <b>app</b>, and add content as <a href="https://github.com/SuYehTarn/CS651_Python_Flask_Group8/blob/main/app/email.py">this code</a>. This piece of code is referred to the Chapter 6 of “Flask Web Development, 2nd Edition”<a href="#1">[1]</a>. It provides a simple email function but suitable for our need.</p>
+
+    <div class="container">
+        <h2>send_async_email</h2>
+        <p>This function triggers the email sending under the context of the app. It would be executed in a thread.</p>
+    </div>
+
+    <div class="container">
+        <h2>send_email</h2>
+        <p>This function composes the email content and create a thread to send the email to the client.</p>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Gmail Account Settings</h2>
+    <p>This tutorial is using Google Mail as an example in the developing environment. The <a href="https://github.com/SuYehTarn/CS651_Python_Flask_Group8/blob/main/config.py">configurations</a> related to the email sending functionality is set for Google mail account. Further more, you need to lower the security level of your Google account.</p>
+    <img src="img/gmail_secure.png" style="width: 80%;">
+    <p>Please remember to reset the security level after completing the tutorial.</p>
+</div>
+
+<div class="container">
+    <h2>Reference</h2>
+    <ul>
+        <li><a name="1">[1]</a> “Flask Web Development, 2nd Edition”, Miguel Grinberg, O'Reilly Media, November, 2018, Chapter 6.
+            <br>This is a book that discusses developing web application in Flask framework. Miguel Grinberg is a professional Python software developer currently working for Twilio. O'Reilly is a popular publisher that has published various books related to software development.
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
