@@ -2,7 +2,7 @@
 """
 
 from flask import render_template, flash, redirect, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from app import db
 from app.admin.form import ReviewFeedbackForm
@@ -44,6 +44,7 @@ def read_feedback(feedback_id):
     if form.validate_on_submit():
         feedback.response = form.response.data
         feedback.review_status_id = form.review_status.data
+        feedback.reviewer_id = current_user.id
         db.session.commit()
         flash('Modification saved.')
 

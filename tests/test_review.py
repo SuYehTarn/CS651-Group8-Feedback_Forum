@@ -3,6 +3,7 @@
 
 import unittest
 from urllib.parse import urlparse
+from flask_login import current_user
 
 from app import create_app, db
 from app.models.feedback import Feedback
@@ -133,28 +134,33 @@ class AdminBlueprintTestCase(unittest.TestCase):
         feedbacks = Feedback.query.all()[:len(data_list)]
 
         # post the response and review statuses
-        for data, feedback in zip(data_list, feedbacks):
-            self.client.post(f'/admin/{feedback.id}',
-                             data=data)
+        with self.client as client:
+            for data, feedback in zip(data_list, feedbacks):
 
-            # check if the database is modified as expectation
-            feedback_in_db = Feedback.query \
-                .filter_by(id=feedback.id).first()
-            self.assertEqual(data['response'],
-                             feedback_in_db.response,
-                             'response not correct')
-            self.assertEqual(data['review_status'],
-                             feedback_in_db.review_status_id,
-                             'review status not correct')
+                client.post(f'/admin/{feedback.id}',
+                            data=data)
 
-            # check if the view is renewed
-            response = self.client.get(f'/admin/{feedback.id}')
-            text = response.get_data(as_text=True)
-            status = ReviewStatus.query \
-                .filter_by(id=data['review_status']).first()
-            self.assertTrue(status.name in text,
-                            ('cannot find the correct '
-                             'review status name in the response'))
-            self.assertTrue(data['response'] in text,
-                            ('cannot find the correct '
-                             'admin response in the response'))
+                # check if the database is modified as expectation
+                feedback_in_db = Feedback.query \
+                    .filter_by(id=feedback.id).first()
+                self.assertEqual(data['response'],
+                                 feedback_in_db.response,
+                                 'response not correct')
+                self.assertEqual(data['review_status'],
+                                 feedback_in_db.review_status_id,
+                                 'review status not correct')
+                self.assertEqual(current_user.id,
+                                 feedback_in_db.reviewer_id,
+                                 'reviewer id not correct')
+
+                # check if the view is renewed
+                response = client.get(f'/admin/{feedback.id}')
+                text = response.get_data(as_text=True)
+                status = ReviewStatus.query \
+                    .filter_by(id=data['review_status']).first()
+                self.assertTrue(status.name in text,
+                                ('cannot find the correct '
+                                 'review status name in the response'))
+                self.assertTrue(data['response'] in text,
+                                ('cannot find the correct '
+                                 'admin response in the response'))
